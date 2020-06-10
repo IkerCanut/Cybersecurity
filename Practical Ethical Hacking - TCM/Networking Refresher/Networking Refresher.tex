@@ -6,6 +6,7 @@
 \usepackage{amssymb}
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 \usepackage{graphicx}
+\usepackage{multicol}
 \author{Iker M. Canut}
 \title{Networking Refresher}
 \begin{document}
@@ -61,10 +62,37 @@ In this example we can see the three way handshake between the port 51916 from t
 \section{UDP}
 UDP stands for User Datagram Protocol and that is a connection-less protocol. This one is used for example in streaming services, DNS, Voice over IP.
 
+\section{Common Ports and Protocols}
 
+\begin{multicols}{2}
+\begin{itemize}
+\item \textbf{TCP}
+\begin{itemize}
+\item \textbf{FTP (21)}: File transfer protocol. You can log in and put a file or get a file off the server.
+\item \textbf{SSH (22)}: Log into a machine remotely (encrypted).
+\item \textbf{Telnet (23)}: Log into a machine remotely (plain text).
+\item \textbf{SMTP (25)}: Mail.
+\item \textbf{DNS (53)}: Domain Name System: Resolve IP addresses to names.
+\item \textbf{HTTP (80) / HTTPS(443)}: Web sites.
+\item \textbf{POP3 (110)}: Mail.
+\item \textbf{SMB (139 + 445)}: The most common port for pentesters. File shares: think about all the crazy exploits: Wannacry, Eternal Blue, MS17.0.1.0. SMB is open so frequently on networks.
+\item \textbf{IMAP (143)}: Mail
+\end{itemize}
+\end{itemize}
 
+\vfill\null
+\columnbreak
+\begin{itemize}
+\item \textbf{UDP}
+\begin{itemize}
+\item \textbf{DNS (53)}: Domain Name System: Resolve IP addresses to names.
+\item \textbf{DHCP (67, 68)}: Associates you with an IP address, kinda random (from a range). The opposite is static IP address.
+\item \textbf{TFTP (69)}: Trivial FTP.
+\item \textbf{SNMP (161)}: Simple Network Management Protocol. When we encounter it there may be information to be gathered. Especially if there are strings being used that are public.
+\end{itemize}
+\end{itemize}
 
-
+\end{multicols}
 
 
 
