@@ -7,11 +7,11 @@
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 \usepackage{graphicx}
 \usepackage{multicol}
-\usepackage{makecell}
 \usepackage{colortbl}
 \usepackage{multirow}
 \usepackage{hhline}
 \usepackage{rotating}
+
 \author{Iker M. Canut}
 \title{Networking Refresher}
 \begin{document}
@@ -147,12 +147,17 @@ So the inet 192.168.0.58 in binary (ones and zeros) is 11000000.10101000.0000000
 
 Now, for the 255.255.255.0 netmask: in binary that is 11111111.11111111.11111111.00000000. It is important to note that when we're talking about netmasks, the switch on has to be in order. i.e we can't have ones mixed up with zeros, like for example 11111111.11110011.00001111.00001100.\\
 
-To simplify all this, we use the CIDR notation, in which we write the IP and then, after a slash ('/'), we write how many ones there are in the netmask. E.g, 192.168.0.58/24. 
+To simplify all this, we use the CIDR notation, in which we write the IP and then, after a slash ('/'), we write how many ones there are in the netmask. E.g, 192.168.0.58/24.\\ 
+
+\begin{quote} \textit{Subnetting is the process of stealing bits from the HOST part of an IP address in order to divide the larger network into smaller sub-networks called subnets.} \end{quote}
+
+\subsection{Subnet Address}
+To calculate the IP Address Subnet you need to perform a bit-wise AND operation (1+1=1, 1+0 or 0+1 =0, 0+0=0) on the host IP address and subnet mask.
 
 \subsection{Hosts}
 Continuing with the previous netmask, we have 8 bits turned off, and that leads us to calculate how many hosts (devices connected to the network) we can have: $2^8 = 256$. The /24 is one of the most common, because it's used mostly in households and small businesses.
 
-\begin{table}[h]
+\begin{table}[p]
 \centering
 \arrayrulecolor{black}
 \begin{tabular}{cc|c|c|l|r|r|r|r|r|r|} 
@@ -210,9 +215,9 @@ Continuing with the previous netmask, we have 8 bits turned off, and that leads 
 \end{tabular}
 \end{table}
 
+\clearpage
 
-
-\begin{table}[]
+\begin{table}[p!]
 \begin{tabular}{ccccl|r|r|r|r|r|r|}
 \cline{6-11}
                                                        &                                                        &                                                        &                          &                              & \multicolumn{3}{c|}{Subnets}                                                               & \multicolumn{3}{c|}{Hosts}                                                                 \\ \cline{4-11} 
