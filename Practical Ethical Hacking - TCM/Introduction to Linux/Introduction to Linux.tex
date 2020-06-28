@@ -8,6 +8,7 @@
 \usepackage{graphicx}
 \usepackage{multicol}
 
+\usepackage[T1]{fontenc}
 
 \author{Iker M. Canut}
 \title{Introduction to Linux}
@@ -128,7 +129,7 @@ If we \textbf{cat /etc/shadow} we can see the passwords, hashed. Therefore, we c
 
 If we create a new user, it will have lower priviliges. But we can change this: anybody in the sudoers file can use sudo and have root access.
 
-\subsection{Basic Networking Commands}
+\section{Basic Networking Commands}
 Some useful basic commands:
 \begin{itemize}
 \item \textbf{ping}: Pinging an IP address or domain name.
@@ -143,4 +144,77 @@ Some useful basic commands:
 \item \textbf{arp -a}: Show the IP Addresses it talks to and the MAC Addresses associated with them.
 \item \textbf{route}: This will print your routing table: it tells you where your traffic exits. There could be a machine that has multiple routes, so you might see 2 different IPs because it might have a dual home NIC, so it's talking to a completely different network that you didn't know it existed.
 \end{itemize}
+
+\section{Services}
+\begin{itemize}
+\item \textbf{systemctl [service-name] start}: Start now a service.
+\item \textbf{systemctl [service-name] stop}: Stop a service that is running.
+\item \textbf{systemctl [service-name] enable}: Enable a service (start it on boot).
+\item \textbf{systemctl [service-name] disable}: Disable a service (it won't start on boot).
+\end{itemize}
+
+Or instead of \textbf{systemctl [service-name] start} you can use \textbf{service [service-name] start}.
+\subsection{Apache2}
+For example, to start an Apache Server: \textbf{service apache2 start}
+
+\subsection{Python Server}
+To start a simple server with python: \textbf{python -m SimpleHTTPServer 80}, or 8080 so it doesn't have problems with Apache. Also you can create your FTP Server with another module.
+
+\subsection{Metasploit}
+To make Metasploit start faster, you can enable the service: \textbf{systemctl enable postgresql}. Metasploit can take some time to start, and this is a tool that we're going to use quite a bit.
+
+\section{Update and Install}
+\textbf{apt update \&\& apt upgrade}. The first thing that appears are the repositories. You check what's updated and what's not.
+
+\subsection{PIP}
+\textbf{apt install python-pip}. Then we can clone a repository, for example the \textit{impacket} package: \\
+\textbf{git clone https://github.com/SecureAuthCorp/impacket.git}\\
+
+A good practice is to install all tools in \textbf{/opt}. In this case, to install this programme (check the README), just unpack it and run \textbf{pip install .} from the directory.
+
+\section{Scripting with Bash}
+In this example, we're gonna code a ping sweeper. To start off, lets analyze a \textbf{ping} response:
+\begin{center}
+\includegraphics[scale=.6]{ping.png}
+\end{center}
+But we wanna narrow this down, so we can extract the IP, so we could pipe it to a \textbf{grep}:
+\begin{center}
+\includegraphics[scale=.6]{pinggrep.png}
+\end{center}
+Then, we can \textbf{cut} it. The \textbf{-d} is the delimiter, and the \textbf{-f} is which part we're going to return.
+\begin{center}
+\includegraphics[scale=.6]{pinggrepcut.png}
+\end{center}
+But we have a colon at the end, so to get rid of it, we can \textbf{tr} it. Tr stands for translate, and the \textbf{-d} is another delimiter.
+\begin{center}
+\includegraphics[scale=.6]{pinggrepcuttr.png}
+\end{center}
+
+\subsection{Scripting}
+We can create file named \textit{ipsweep.sh} and write this:
+
+\indent \textbf{\#!/bin/bash}\\
+
+\indent \textbf{if [ "\$1" == "" ]}\\
+\indent \textbf{then}\\
+\indent \textbf{echo "You forgot an IP address!"}\\
+\indent \textbf{echo "Syntax: ipsweep.sh 192.168.1"}\\
+
+\indent \textbf{else}\\
+\indent \textbf{for ip in {1..254}}\\
+\indent \textbf{do}\\
+\indent \textbf{  ping -c 1 \$1.\$ip | grep "64 bytes" | cut -d " " -f 4 | tr -d ":" \&}\\
+\indent \textbf{done}\\
+\indent \textbf{fi}\\
+
+At the very top, we need to declare the \textbf{hashbang}: \#!/bin/bash. We need it in all our scripts. The \textbf{for} is a simple for loop in bash. The \$... are variables: \textbf{\$ip} is the iterator, \textbf{\$1} is user input. The \textbf{\&} is for having multiple threads.\\
+
+Then we can save it to a file, like for example \textbf{ipsweep.sh 192.168.1 > iplist.txt}
+
+\subsection{Looping in one line}
+If we want to do an nmap scan on all these IP addresses, we could simply:\\
+\begin{center}
+\textbf{for ip in \$(cat iplist.txt); do nmap -sS -p 80 -T4 \$ip; done }
+\end{center}
+
 \end{document}
