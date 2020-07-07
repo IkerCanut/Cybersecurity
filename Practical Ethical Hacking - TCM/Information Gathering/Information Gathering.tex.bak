@@ -1,0 +1,22 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\author{Iker M. Canut}
+\begin{document}
+\title{Information Gathering}
+\maketitle
+\newpage
+
+\section{hunter.io}
+Hunter is a Domain Search. It gives a list of people that works in the organization: You get the first and last name and the most common pattern as far as email addresses are concerned. You can export all this information in a .csv. Maybe it tells you the department: Human Resources, IT/Engineering, Management, Executive, Legal, Sales, Support,... \\
+
+This service may not list all the workers, but if you know that the email pattern is, for example, \textbf{\{f\}\{last\}@tesla.com}, and you know because of Linkedin, that "\textit{Iker Canut"} works there, you can probably assume his email is \textit{icanut@tesla.com}. This is crucial when we perform attacks (e.g password spraying in a login form).
+
+\section{Breach Parse}
+In hmaverickadams' Github, we can find a breach-parse. It's quite heavy, but it has emails and password from breaches: credentials got dumped out and you can use them. The bash script is for searching more easily. To illustr
+\end{document}
