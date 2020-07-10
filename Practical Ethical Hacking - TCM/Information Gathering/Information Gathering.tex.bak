@@ -1,11 +1,11 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
-\usepackage[spanish]{babel}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{multicol}
 \author{Iker M. Canut}
 \begin{document}
 \title{Information Gathering}
@@ -42,4 +42,104 @@ This is THE go to tool for a lot of people. You can go to the Github and downloa
 \item amass track – Track differences between enumerations
 \item amass db – Manipulate the Amass graph database
 \end{itemize}
+
+\section{Narrowing the lists}
+You can use for example the thomnomnom's tool named httprobe to check a list of domains, to see which ones are alive.
+
+\section{TOOL: builtwith}
+You can go to builtwith.com and search a domain: You'll get information about:
+\begin{multicols}{2}
+\begin{itemize}
+\item Analytics and Tracking
+\item \textbf{Widgets}
+\item Languages
+\item \textbf{Frameworks}
+\item Mobile
+\item \textbf{Content Delivery Network}
+\item \textbf{Payment}
+\item Audio / Video Media
+\item Content Management System
+\item JavaScript Libraries and Functions
+\item Advertising
+\item Email Hosting Providers
+\item Web Hosting Providers
+\item SSL Certificates
+\item Name Server
+\item Web Servers
+\item Verified CDN
+\item Web Master Registration
+\item Content Delivery Network
+\end{itemize}
+\end{multicols}
+
+\section{TOOL: wappalyzer}
+You can add this extension to your browser, and you get a little button that shows a little bit of information. It gives you an indication right away with what's going on. This is more of an active type of reconnaissance because we need to interact with the website: We're not doing any type of scanning, but we're just going after the website like a normal user would, so it's still passive.\\
+
+This is important because if we know that's running PHP or Drupal, there may be a vulnerability within those. If we get the versions, that's a plus! The more information that we can gather on a client, the better.
+
+\section{TOOL: whatweb}
+You can use this tool to gather information. It's not as pretty as the other options, but it's built in in Kali. You can also get the version number.
+
+\section{TOOL: burpsuite}
+This is called a "Web proxy". This means that it has the capability of intercepting traffic for us. First, we need to set up our browser, so we open up firefox > Preferences > Network settings > Manual proxy configuration:
+\begin{itemize}
+\item HTTP Proxy: 127.0.0.1:8080.
+\item And DO use this proxy server for all protocols.
+\end{itemize}
+Then, you should go to \textbf{https://burp} and accept this certificate exception. After that, click on \textbf{CA Certificate} and save the file.\\
+
+Then, again in the browser's preferences, but under Privacy \& Security > View Certificates > Import. Then you import the file you just downloaded and double check the boxes.\\
+
+Now, if we go to \textit{tesla.com}, it's gonna stall out.. But if we go to the burp app, we see that the Proxy tab is lit up. If you go there, you can see that is gathering some information. You can forward packages and also you can modify them.\\
+
+If you go to the target tab, you can see all the libraries, themes. And also you can analyze packages, you can find CMSs with its version for example. While intercepting traffic you can get a lot of information in the headers.
+
+\section{How to Google}
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|cc|}
+\hline
+\textbf{OR} & This will return results related to X or Y, or both. &  jobs OR gates\\
+\hline
+\textbf{AND} & This will return only results related to both X and Y. & jobs AND gates\\
+\hline
+\textbf{-} & Exclude a term or phrase. & jobs ‑apple\\
+\hline
+\textbf{*} & Acts as a wildcard and will match any word or phrase. & steve * apple\\
+\hline
+\textbf{( )} & Group multiple terms or search operators & \\& to control how the search is executed. & (ipad OR iphone) apple\\
+\hline
+\textbf{\$} & Search for prices. & ipad $\$329$\\
+\hline
+\textbf{define:} & The dictionary built into Google. & define:entrepreneur\\
+\hline
+\textbf{cache:} & Returns the most recent cached version of a web page. & cache:apple.com\\
+\hline
+\textbf{filetype:} & Restrict results to those of a certain filetype: & \\ & PDF, DOCX, TXT, PPT. & apple filetype:pdf\\
+\hline
+\textbf{site:} & Limit results to those from a specific website. & site:apple.com\\
+\hline
+\textbf{related:} & Find sites related to a given domain. & related:apple.com\\
+\hline
+\textbf{[all]intitle:} & Find pages with certain words in the title. & intitle:apple\\
+\hline
+\textbf{[all]inurl:} & Find pages with certain words in the URL. & inurl:apple\\
+\hline
+\textbf{[all]intext:} & Find pages containing certain words in the content. & intext:apple\\
+\hline
+\textbf{AROUND(X)} & Find pages containing two words or phrases within & \\ & X words of each other. & apple AROUND(4) iphone \\
+\hline
+\textbf{in} & Convert one unit to another & $\$329$ in GBP\\
+\hline
+\textbf{\#..\#} & Search for a range of numbers. & wwdc video 2010..2014 \\ 
+\hline
+\textbf{+} & Force an exact-match search on a single word or phrase.& jobs +apple\\& You can do the same thing by using double quotes & jobs "apple"\\
+\hline
+
+\end{tabular}
+\end{table}
+
+Others quite intuitive are: \textbf{weather:}, \textbf{stocks:}, \textbf{map:}, \textbf{movie:}, \textbf{location:}\\
+
+For example, you could google something like: \textbf{site:tesla.com filetype:csv}. You could potentially find sensitive files out there, maybe credentials, backup files...
 \end{document}
