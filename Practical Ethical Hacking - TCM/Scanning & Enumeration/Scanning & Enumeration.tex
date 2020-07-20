@@ -1,0 +1,111 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{multicol}
+\author{Iker M. Canut}
+\begin{document}
+\title{Scanning \& Enumeration}
+\maketitle
+\newpage
+
+\section{Install a Vulnerable VM (Kioptix)}
+To start off, a Kioptix Level 1, from Vulnhub, should work fine. Vulnhub is a webpage where you could find a lot of vulnerable machines, with their level, flags, operating systems... It's like a puzzle. \\
+
+First, you download the rar and unzip it. Then open it with VMWare or VBox. Configurations:
+\begin{itemize}
+\item Network Settings: \textbf{NAT}: Used to share the host's IP address.
+\item Memory: \textbf{256 MB} should be fine, we're gonna run it in the background.
+\item In the \textbf{Kioptix Level 1.vmx} we need to change ethernet0.networkName = "Bridged" to "nat".
+\item Power it on, and select \textbf{I copied it}.
+\end{itemize}
+
+\section{Starting with Nmap}
+Once we have the OS up and running, and we get to know the IP, we could start using Nmap: e.g. \textbf{nmap -T4 -p- -A [IP]}. -A stands for \textit{All}: Fingerprinting, OS...\\
+
+\begin{multicols}{2}
+\begin{itemize}
+\item \textbf{-sS}: TCP
+\item \textbf{-sU}: UDP
+\end{itemize}
+\end{multicols}
+
+BUT, if we run \textbf{nmap -sU -T4 -p- -A [IP]} it's going to take hours. Because it is a connection-less protocol, we do not have that instant response. We should run \textbf{nmap -sU -T4 -p [IP]}.\\
+
+Also, typically it is much faster to run a \textbf{-p-} rather than a \textbf{-A}.
+
+\section{Results}
+The first thing we notice are the open ports:
+\begin{itemize}
+\item \textbf{22/TCP}: OpenSSH 2.9p2
+\item \textbf{80/TCP}: Apache httpd 1.3.20
+\item \textbf{111/TCP}: Samba
+\item \textbf{139/TCP}: Samba
+\item \textbf{443/TCP}: Apache httpd 1.3.20
+\item \textbf{32768/TCP}: 
+\end{itemize}
+And the system information:
+\begin{itemize}
+\item Running \textbf{Linux 2.4.X}
+
+\section{Possible exploits}
+The ports that should light you up are \textit{"80 and 443"} and \textit{"111 and 139"}. Those are commonly found with exploits: There are a lot of SMB exploits (e.g Wannacry, MS 17.0.1.0 aka EternalBlue). SMB and Websites have been historically BAD. SSH is not that bad, we could try to brute force it, try default credentials... But there is not much to do, it is hard to get a shell back. It is not common to attack SSH because it is not a low hanging fruit, and that is what we are after.
+\end{itemize}
+
+\subsection{Investigation 80 and 443}
+First things first, go to the websites, why not? You can try the \textbf{[ip]} and \textbf{https://[ip]}, for ports 80 and 443 are open. In this case, we have a \textbf{default webpage}. This is an \textit{automatic finding}. It is not exploitable by default, but it tells us a little bit about the architecture that's running behind the scenes and a little bit about the client's potential hygine:
+\begin{multicols}{2}
+\begin{itemize}
+\item Apache
+\item Redhat Linux
+\end{itemize}
+\end{multicols}
+This should bring us a question: Are there other web directories behind this? \textbf{Directory busting}.\\
+
+If we click on the documentation button, we see that it really is a \textit{bad link}, because it didn't find anything. Also, this is called \textit{information disclosure} because it tell us the version of Apache: $1.3.20$ and a name: $kioptrix.level1$. Moreover, we can get naming conventions on their internal network. Take a screenshot and add it to your notes.
+
+\subsubsection{Nikto}
+Nikto is a web vulnerability scanner. It is good for begginers. If a client has really good security (not common), you might run into some issues and get auto blocked (firewall).\\
+
+In this example, check \textbf{nikto -h http://[ip]}. This is detecting that the server is Apache/1.3.20, mod\_ssl/2.8.4, OpenSSL/0.9.6b. It also tells us some vulnerabilities back: like for example ETags, anti-clickjacking X-Frame-Options... On an external penetration test, that is not really important, but if we're doing a web penetration test, that becomes more interesting. Now we should focus on Apache, mod\_ssl and OpenSSL, for they appear to be outdated. This is another discovery. We got an Apache/1.3.20 in the system, and we got AT LEAST Apache/2.4.37 available, so maybe that's gold. Also it is vulnerable to a remote DoS, possible code execution, vulnerable to overflows, vulnerable to a \textbf{remote} buffer overflow (the remote is important, may allow a remote shell). TRACE is allowed (exploitable through XST).\\
+
+SAVE ALL THE SCANS AND HAVE THEM AVAILABLE
+
+\section{Researching Potential Vulnerabilities}
+Recopying the notes, we have this:
+\begin{itemize}
+\item Default webpage - Apache - PHP
+\item Information Disclosure - 404 page
+\item Information Disclosure - Server headers (version information)\\
+\end{itemize}
+
+\begin{itemize}
+\item 80/tcp \ \ open \ \ http \ \ Apache httpd 1.3.20 ((Unix) (Red-Hat/Linux) mod\_ssl/2.8.4 OpenSSL/0.9.6b)
+\begin{itemize}
+\item mod\_ssl/2.8.4 to 2.8.7 - Vulnerable to a remote buffer overflow, may allow a remote shell.
+\end{itemize}
+\item SMB \ \ Unix (Samba 2.2.1a) (juicy)
+\item Webalizer Version 2.01 (not juicy)
+\item SSH OpenSSH 2.9p2 (not juicy)
+\end{itemize}
+
+First, we can google "mod\_ssl 2.8.4 exploit". Some good pages are exploit-db and rapid7. Then "Apache 1.3.20 exploit". In cvedetails, just look at the score. Red is "good".\\
+
+\newpage
+Vulnerabilities:
+\begin{itemize}
+\item \textbf{80/443 - Potentially vulnerable to OpenLuck}. \\https://www.exploit-db.com/exploits/764,\\https://github.com/heltonWernik/OpenLuck.
+\item \textbf{139 - Potentially vulnerable to trans2open}\\ https://www.rapid7.com/db/modules/exploit/linux/samba/trans2open, \\https://www.exploit-db.com/exploits/22469
+\end{itemize}
+
+\noindent \dotfill
+
+To do this locally, you can just \textbf{searchsploit Samba 2.2} (do NOT be too specific). Then look at the path. E.g, osx is not the os. It's Unix/Linux. Also, remote is HUGE.
+
+
+
+
+\end{document}
