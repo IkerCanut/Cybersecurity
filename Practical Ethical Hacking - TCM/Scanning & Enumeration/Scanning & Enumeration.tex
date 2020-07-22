@@ -105,7 +105,20 @@ Vulnerabilities:
 
 To do this locally, you can just \textbf{searchsploit Samba 2.2} (do NOT be too specific). Then look at the path. E.g, osx is not the os. It's Unix/Linux. Also, remote is HUGE.
 
+\section{Extra Tools}
+\subsection{Masscan}
+Was built to scan the entire internet really fast. You can download it from Github (Robert David Graham), on kali is already downloaded. \textbf{masscan -p1-65535 [IP]}. You can give it more threads with \textbf{--rate 1000}.
 
+\subsection{Metasploit}
+First, open \textbf{msfconsole}. Then, \textbf{search portscan}. Then \textbf{use auxiliary/scanner/portscan/syn}. Check the \textbf{options}. \textbf{set rhost [IP]}. \textbf{set ports 1-65535}. Finally \textbf{run}. Then you could set the threads, but usually it's very slow. The good part is that you could run it through a shell that we have on a machine, it makes life a lot easier (instead of trying to install nmap or other tools).
 
+\subsection{Nessus}
+A lot of people start with this tool. To download it, google it and download it from Tenable. Open a terminal and \textbf{dpkg -i Nessus-[version][os]}. Then type \textbf{/etc/init.d/nessusd start} and go to \textbf{https://kali:8834/} in your browser. Make a coffee and wait.\\
+
+Start a \textbf{New Scan $\rightarrow$ Basic Network Scan}. Specify the target. You can also schedule a scan, Monday 8am, sleep a little longer. Port scan (all ports). Launch it.\\
+
+YOu can also use \textbf{Advanced Scan}. Same deal, but inside the Discovery tab, you can find a lot of options. Also service discovery, brute force with default credentials (or enter credentials).\\
+
+When the scan is finished, you can see the list of vulnerabilities with its severity (critical, high...). Then add them to your notes. Depending on the assessment and how is it going, we may report only the top ones, not the medium and low. But if we're not finding anything, we could report the medium. But always download it all. You should focus on the low hanging fruits, focus on what you could do with your time. ALWAYS VERIFY THE VULNERABILITY, NEVER TRUST YOUR VULNERABILITY SCANNER JUST BECAUSE IT SAYS "HEY, I DETECTED THIS". It's just an extra layer of vulnerability assessment for us, it's a friend.
 
 \end{document}
